@@ -10,57 +10,45 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
 }
 
-const variantStyles: Record<ButtonVariant, string> = {
+const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-sky-600 text-white hover:bg-sky-700 focus-visible:ring-sky-500 disabled:bg-sky-300",
+    "bg-[var(--color-ink)] text-white hover:bg-[#1a2332] shadow-[var(--shadow-xs)] focus-visible:ring-[var(--color-ink)] disabled:bg-[var(--color-ink-faint)]",
   secondary:
-    "bg-slate-800 text-white hover:bg-slate-900 focus-visible:ring-slate-500 disabled:bg-slate-400",
+    "bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] shadow-[var(--shadow-xs)] focus-visible:ring-[var(--color-accent)]",
   outline:
-    "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 focus-visible:ring-sky-500",
-  ghost: "text-sky-700 hover:bg-sky-50 focus-visible:ring-sky-500",
+    "border border-[var(--color-line-strong)] bg-white text-[var(--color-ink)] hover:bg-[var(--color-paper)] focus-visible:ring-[var(--color-accent)]",
+  ghost:
+    "text-[var(--color-ink-muted)] hover:bg-[var(--color-paper)] hover:text-[var(--color-ink)] focus-visible:ring-[var(--color-accent)]",
 };
 
-const sizeStyles: Record<ButtonSize, string> = {
-  sm: "min-h-9 px-3 py-1.5 text-sm",
-  md: "min-h-10 px-4 py-2 text-sm",
-  lg: "min-h-11 px-6 py-3 text-base",
+const sizes: Record<ButtonSize, string> = {
+  sm: "h-8 rounded-lg px-3 text-xs font-semibold",
+  md: "h-10 rounded-lg px-4 text-sm font-semibold",
+  lg: "h-11 rounded-xl px-5 text-sm font-semibold",
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      className,
-      variant = "primary",
-      size = "md",
-      isLoading,
-      disabled,
-      children,
-      ...props
-    },
-    ref,
-  ) => (
+  ({ className, variant = "primary", size = "md", isLoading, disabled, children, ...props }, ref) => (
     <button
       ref={ref}
       className={cn(
-        "inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg font-medium transition-colors duration-150 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100",
-        variantStyles[variant],
-        sizeStyles[size],
+        "inline-flex cursor-pointer items-center justify-center gap-2 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98] disabled:cursor-not-allowed disabled:active:scale-100",
+        variants[variant],
+        sizes[size],
         className,
       )}
       disabled={disabled || isLoading}
       aria-busy={isLoading}
       {...props}
     >
-      {isLoading && (
+      {isLoading ? (
         <>
-          <span
-            className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
-            aria-hidden="true"
-          />
+          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true" />
           <span className="sr-only">Loading</span>
         </>
+      ) : (
+        children
       )}
-      {!isLoading && children}
     </button>
   ),
 );

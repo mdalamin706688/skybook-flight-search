@@ -15,9 +15,7 @@ const meta = {
 describe("Pagination", () => {
   it("renders result summary", () => {
     render(<Pagination meta={meta} onPageChange={vi.fn()} />);
-    expect(screen.getByText(/showing/i)).toBeInTheDocument();
-    expect(screen.getByText(/11.20/)).toBeInTheDocument();
-    expect(screen.getByText("31")).toBeInTheDocument();
+    expect(screen.getByText(/page 2 of 4/i)).toBeInTheDocument();
   });
 
   it("calls onPageChange when a page is selected", async () => {

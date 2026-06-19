@@ -95,7 +95,7 @@ describe("SearchResults", () => {
     });
 
     render(<SearchResults />);
-    expect(screen.getByText(/no flights available/i)).toBeInTheDocument();
+    expect(screen.getByText(/no flights on this route/i)).toBeInTheDocument();
   });
 
   it("shows invalid search for bad URL params", () => {
@@ -116,7 +116,7 @@ describe("SearchResults", () => {
 
     render(<SearchResults />);
     expect(screen.getByText("DL 401")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /select delta flight/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /select delta dl 401/i })).toBeInTheDocument();
   });
 
   it("passes simulateError to useFlightSearch", () => {
@@ -156,6 +156,7 @@ describe("SearchResults", () => {
     });
 
     render(<SearchResults />);
-    expect(screen.getAllByLabelText(/flight results pagination/i)).toHaveLength(2);
+    expect(screen.getByLabelText(/flight results pagination/i)).toBeInTheDocument();
+    expect(screen.getByText(/page 1 of 4/i)).toBeInTheDocument();
   });
 });

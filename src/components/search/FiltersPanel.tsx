@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils/cn";
-import { focusRing, interactiveControl } from "@/lib/utils/interactive-styles";
+import { panel, panelInset } from "@/lib/utils/design-tokens";
+import { focusRing } from "@/lib/utils/interactive-styles";
 import type { FlightFilters } from "@/lib/types/flight";
 import { getPriceRange, getUniqueAirlines } from "@/lib/utils/flight-utils";
 import type { Flight } from "@/lib/types/flight";
@@ -13,146 +14,112 @@ interface FiltersPanelProps {
   onFiltersChange: (filters: FlightFilters) => void;
 }
 
-function countActiveFilters(filters: FlightFilters): number {
-  let count = 0;
-  if (filters.maxPrice !== undefined) count += 1;
-  if (filters.maxStops !== undefined) count += 1;
-  if (filters.airlines && filters.airlines.length > 0) count += 1;
-  return count;
+function countActive(filters: FlightFilters) {
+  let n = 0;
+  if (filters.maxPrice !== undefined) n++;
+  if (filters.maxStops !== undefined) n++;
+  if (filters.airlines?.length) n++;
+  return n;
 }
 
 export function FiltersPanel({ flights, filters, onFiltersChange }: FiltersPanelProps) {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const airlines = getUniqueAirlines(flights);
   const { min, max } = getPriceRange(flights);
-  const activeCount = countActiveFilters(filters);
-  const currentMaxPrice = filters.maxPrice ?? max;
+  const active = countActive(filters);
+  const price = filters.maxPrice ?? max;
 
-  function toggleAirline(airline: string) {
-    const current = filters.airlines ?? [];
-    const updated = current.includes(airline)
-      ? current.filter((a) => a !== airline)
-      : [...current, airline];
-    onFiltersChange({ ...filters, airlines: updated.length > 0 ? updated : undefined });
+  function toggleAirline(name: string) {
+    const cur = filters.airlines ?? [];
+    const next = cur.includes(name) ? cur.filter((a) => a !== name) : [...cur, name];
+    onFiltersChange({ ...filters, airlines: next.length ? next : undefined });
   }
 
-  const panelContent = (
+  const body = (
     <div className="space-y-6">
-      <div className="space-y-2">
-        <label htmlFor="max-price" className="text-sm font-medium text-slate-700">
-          Max price: ${currentMaxPrice}
-        </label>
+      <div>
+        <div className="mb-2 flex items-baseline justify-between">
+          <span className="text-xs font-medium text-[var(--color-ink-muted)]">Max fare</span>
+          <span className="text-sm font-semibold tabular-nums text-[var(--color-ink)]">${price}</span>
+        </div>
         <input
-          id="max-price"
           type="range"
           min={min}
           max={max}
           step={10}
-          value={currentMaxPrice}
-          onChange={(e) =>
-            onFiltersChange({ ...filters, maxPrice: Number(e.target.value) })
-          }
-          className="w-full cursor-pointer accent-sky-600"
-          aria-label="Maximum price filter"
-          aria-valuemin={min}
-          aria-valuemax={max}
-          aria-valuenow={currentMaxPrice}
+          value={price}
+          onChange={(e) => onFiltersChange({ ...filters, maxPrice: Number(e.target.value) })}
+          className="h-1 w-full cursor-pointer accent-[var(--color-ink)]"
+          aria-label="Maximum fare"
         />
-        <div className="flex justify-between text-xs text-slate-400">
+        <div className="mt-1 flex justify-between text-[10px] text-[var(--color-ink-faint)]">
           <span>${min}</span>
           <span>${max}</span>
         </div>
       </div>
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-slate-700">Stops</legend>
-        <div className="flex flex-col gap-2">
+      <fieldset>
+        <legend className="mb-2 text-xs font-medium text-[var(--color-ink-muted)]">Stops</legend>
+        <div className="space-y-0.5">
           {[
-            { value: undefined, label: "Any" },
-            { value: 0, label: "Nonstop only" },
-            { value: 1, label: "1 stop max" },
-          ].map((option) => (
+            { v: undefined, l: "Any" },
+            { v: 0, l: "Nonstop" },
+            { v: 1, l: "1 stop max" },
+          ].map((o) => (
             <label
-              key={String(option.value)}
-              className={cn("flex cursor-pointer items-center gap-2 text-sm", interactiveControl)}
+              key={String(o.v)}
+              className={cn(
+                "flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-2 text-sm",
+                filters.maxStops === o.v ? "bg-[var(--color-accent-soft)] font-medium text-[var(--color-accent)]" : "text-[var(--color-ink-muted)] hover:bg-[var(--color-paper)]",
+              )}
             >
-              <input
-                type="radio"
-                name="stops"
-                checked={filters.maxStops === option.value}
-                onChange={() =>
-                  onFiltersChange({ ...filters, maxStops: option.value })
-                }
-                className="cursor-pointer accent-sky-600"
-              />
-              {option.label}
+              <input type="radio" name="stops" checked={filters.maxStops === o.v} onChange={() => onFiltersChange({ ...filters, maxStops: o.v })} className="accent-[var(--color-accent)]" />
+              {o.l}
             </label>
           ))}
         </div>
       </fieldset>
 
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-slate-700">Airlines</legend>
-        <div className="flex max-h-48 flex-col gap-2 overflow-y-auto pr-1">
-          {airlines.map((airline) => (
+      <fieldset>
+        <legend className="mb-2 text-xs font-medium text-[var(--color-ink-muted)]">Airline</legend>
+        <div className="max-h-36 space-y-0.5 overflow-y-auto">
+          {airlines.map((name) => (
             <label
-              key={airline}
-              className={cn("flex cursor-pointer items-center gap-2 text-sm", interactiveControl)}
+              key={name}
+              className={cn(
+                "flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-2 text-sm",
+                filters.airlines?.includes(name) ? "bg-[var(--color-accent-soft)] font-medium text-[var(--color-accent)]" : "text-[var(--color-ink-muted)] hover:bg-[var(--color-paper)]",
+              )}
             >
-              <input
-                type="checkbox"
-                checked={filters.airlines?.includes(airline) ?? false}
-                onChange={() => toggleAirline(airline)}
-                className="cursor-pointer accent-sky-600"
-              />
-              {airline}
+              <input type="checkbox" checked={filters.airlines?.includes(name) ?? false} onChange={() => toggleAirline(name)} className="accent-[var(--color-accent)]" />
+              {name}
             </label>
           ))}
         </div>
       </fieldset>
 
-      <button
-        type="button"
-        onClick={() => onFiltersChange({})}
-        className={cn(
-          "cursor-pointer text-sm text-sky-600 hover:text-sky-800 hover:underline",
-          focusRing,
-          "rounded px-1 py-0.5",
-        )}
-      >
-        Clear all filters
-      </button>
+      {active > 0 && (
+        <button type="button" onClick={() => onFiltersChange({})} className={cn("text-xs font-semibold text-[var(--color-accent)]", focusRing, "rounded px-1")}>
+          Reset filters
+        </button>
+      )}
     </div>
   );
 
   return (
-    <aside className="space-y-3">
+    <aside>
       <button
         type="button"
-        className={cn(
-          "flex w-full items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-800 shadow-sm lg:hidden",
-          interactiveControl,
-          focusRing,
-        )}
-        aria-expanded={mobileOpen}
-        aria-controls="filters-panel-content"
-        onClick={() => setMobileOpen((open) => !open)}
+        className={cn(panelInset, "mb-3 flex w-full items-center justify-between px-3 py-2.5 text-sm font-medium lg:hidden", focusRing)}
+        aria-expanded={open}
+        onClick={() => setOpen(!open)}
       >
-        <span>Filters{activeCount > 0 ? ` (${activeCount} active)` : ""}</span>
-        <span aria-hidden="true">{mobileOpen ? "−" : "+"}</span>
+        Filters{active > 0 ? ` (${active})` : ""}
+        <span aria-hidden="true">{open ? "−" : "+"}</span>
       </button>
-
-      <div
-        id="filters-panel-content"
-        className={cn(
-          "rounded-xl border border-slate-200 bg-white p-5 shadow-sm",
-          mobileOpen ? "block" : "hidden lg:block",
-        )}
-      >
-        <h2 className="mb-6 hidden text-sm font-semibold uppercase tracking-wide text-slate-500 lg:block">
-          Filters
-        </h2>
-        {panelContent}
+      <div className={cn(panel, "p-5", open ? "block" : "hidden lg:block")}>
+        <h2 className="mb-4 text-xs font-semibold uppercase tracking-wider text-[var(--color-ink-faint)]">Refine</h2>
+        {body}
       </div>
     </aside>
   );

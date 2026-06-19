@@ -1,15 +1,28 @@
 @import "tailwindcss";
 
-:root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-ink: #0c1222;
+  --color-ink-muted: #5c6578;
+  --color-ink-faint: #94a3b8;
+  --color-paper: #fafaf9;
+  --color-paper-elevated: #ffffff;
+  --color-line: #e8eaed;
+  --color-line-strong: #d1d5db;
+  --color-accent: #1a56db;
+  --color-accent-hover: #1648b8;
+  --color-accent-soft: #eff4ff;
+  --color-success: #047857;
+  --color-success-soft: #ecfdf5;
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display-family);
   --font-mono: var(--font-geist-mono);
+
+  --shadow-xs: 0 1px 2px rgb(12 18 34 / 0.04);
+  --shadow-sm: 0 1px 3px rgb(12 18 34 / 0.06), 0 1px 2px rgb(12 18 34 / 0.04);
+  --shadow-md: 0 4px 16px rgb(12 18 34 / 0.06), 0 2px 4px rgb(12 18 34 / 0.04);
+  --shadow-lg: 0 12px 40px rgb(12 18 34 / 0.08), 0 4px 12px rgb(12 18 34 / 0.04);
+  --shadow-float: 0 24px 64px rgb(12 18 34 / 0.12), 0 8px 20px rgb(12 18 34 / 0.06);
 }
 
 @layer base {
@@ -18,15 +31,21 @@
   }
 
   body {
-    background: var(--background);
-    color: var(--foreground);
-    font-family: var(--font-sans), system-ui, sans-serif;
+    font-family: var(--font-body), system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  a[href]:not([aria-disabled="true"]) {
-    cursor: pointer;
+  ::selection {
+    background: #dbeafe;
+    color: #0c1222;
   }
 
+  a[href]:not([aria-disabled="true"]),
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   label:has(input[type="checkbox"]),
@@ -59,22 +78,83 @@
     position: absolute;
     left: 1rem;
     top: 1rem;
-    z-index: 50;
-    border-radius: 0.5rem;
+    z-index: 100;
+    border-radius: 8px;
     background: white;
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #0f172a;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    padding: 0.5rem 0.875rem;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
     transform: translateY(-200%);
     transition: transform 150ms ease;
   }
 
   .skip-link:focus-visible {
     transform: translateY(0);
-    outline: 2px solid #0284c7;
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+  }
+
+  .app-canvas {
+    background-color: var(--color-paper);
+    background-image:
+      radial-gradient(ellipse 100% 80% at 50% -30%, rgb(26 86 219 / 0.06), transparent 50%);
+  }
+
+  .hero-canvas {
+    background-color: #0c1222;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -20%, rgb(26 86 219 / 0.35), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 100% 0%, rgb(99 102 241 / 0.15), transparent 50%),
+      linear-gradient(180deg, #0f1729 0%, #0c1222 100%);
+  }
+
+  .ticket-notch {
+    background-image: radial-gradient(circle at 0 50%, var(--color-paper) 6px, transparent 6px),
+      radial-gradient(circle at 100% 50%, var(--color-paper) 6px, transparent 6px);
+    background-size: 12px 12px;
+    background-position: 0 0, 100% 0;
+    background-repeat: repeat-y;
+  }
+
+  .confirmation-canvas {
+    background-color: var(--color-paper);
+    background-image:
+      radial-gradient(ellipse 90% 60% at 50% -15%, rgb(4 120 87 / 0.07), transparent 55%),
+      radial-gradient(ellipse 50% 40% at 100% 20%, rgb(26 86 219 / 0.04), transparent 50%);
+  }
+
+  .boarding-pass-shadow {
+    box-shadow:
+      var(--shadow-lg),
+      0 0 0 1px rgb(12 18 34 / 0.03);
+  }
+}
+
+@media print {
+  body {
+    background: #fff !important;
+  }
+
+  .skip-link,
+  .no-print,
+  header[role="banner"],
+  footer {
+    display: none !important;
+  }
+
+  .confirmation-canvas {
+    background: #fff !important;
+    padding: 0 !important;
+  }
+
+  .confirmation-print-root {
+    box-shadow: none !important;
+  }
+
+  .boarding-pass-shadow {
+    box-shadow: none !important;
+    break-inside: avoid;
   }
 }
 
@@ -89,6 +169,5 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }

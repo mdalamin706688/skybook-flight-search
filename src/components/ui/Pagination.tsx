@@ -26,31 +26,35 @@ export function Pagination({
     return null;
   }
 
+  if (variant === "summary") {
+    return (
+      <p className={cn("text-xs text-[var(--color-ink-faint)]", className)}>
+        <span className="font-medium text-[var(--color-ink-muted)]">{startIndex}–{endIndex}</span> of{" "}
+        <span className="font-medium text-[var(--color-ink-muted)]">{totalItems}</span>
+      </p>
+    );
+  }
+
   return (
     <nav
       aria-label="Flight results pagination"
       className={cn(
-        "flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-3 border-t border-[var(--color-line)] pt-4 sm:flex-row sm:items-center sm:justify-between",
         className,
       )}
     >
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
-        <p className="text-sm text-slate-600">
-          Showing{" "}
-          <span className="font-medium text-slate-900">
-            {startIndex}–{endIndex}
-          </span>{" "}
-          of{" "}
-          <span className="font-medium text-slate-900">{totalItems}</span> flights
+        <p className="text-xs text-[var(--color-ink-faint)]">
+          Page {currentPage} of {totalPages}
         </p>
 
         {onPageSizeChange && (
-          <label className="flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+          <label className="flex cursor-pointer items-center gap-2 text-xs text-[var(--color-ink-faint)]">
             <span>Per page</span>
             <select
               value={pageSize}
               onChange={(e) => onPageSizeChange(Number(e.target.value) as PageSize)}
-              className={cn(fieldStyles, "min-h-10 cursor-pointer py-1.5")}
+              className={cn(fieldStyles, "h-8 cursor-pointer py-1")}
               aria-label="Results per page"
             >
               {PAGE_SIZE_OPTIONS.map((size) => (
@@ -63,8 +67,8 @@ export function Pagination({
         )}
       </div>
 
-      {variant === "full" && totalPages > 1 && (
-        <div className="flex max-w-full items-center gap-1 overflow-x-auto pb-1">
+      {totalPages > 1 && (
+        <div className="flex items-center gap-0.5">
           <PaginationButton
             label="Previous page"
             disabled={currentPage === 1}
@@ -75,11 +79,7 @@ export function Pagination({
 
           {pageNumbers.map((page, index) =>
             page === "ellipsis" ? (
-              <span
-                key={`ellipsis-${index}`}
-                className="px-2 text-sm text-slate-400"
-                aria-hidden="true"
-              >
+              <span key={`ellipsis-${index}`} className="px-1 text-[var(--color-ink-faint)]" aria-hidden="true">
                 …
               </span>
             ) : (
@@ -130,13 +130,13 @@ function PaginationButton({
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        "min-h-11 min-w-[2.75rem] shrink-0 rounded-md px-3 py-2 text-sm font-medium",
+        "h-8 min-w-8 rounded-lg px-2.5 text-xs font-semibold",
         interactiveControl,
         focusRing,
         "disabled:cursor-not-allowed disabled:opacity-40",
         active
-          ? "bg-sky-600 text-white hover:bg-sky-700"
-          : "text-slate-700 hover:bg-slate-100",
+          ? "bg-[var(--color-ink)] text-white hover:bg-[#1a2332]"
+          : "text-[var(--color-ink-muted)]",
       )}
     >
       {children}

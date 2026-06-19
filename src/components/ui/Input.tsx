@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils/cn";
-import { fieldStyles } from "@/lib/utils/interactive-styles";
+import { fieldStyle } from "@/lib/utils/interactive-styles";
 import { InputHTMLAttributes, forwardRef } from "react";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -12,9 +12,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
 
     return (
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-slate-700">
+          <label htmlFor={inputId} className="text-xs font-medium text-[var(--color-ink-muted)]">
             {label}
           </label>
         )}
@@ -22,9 +22,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={cn(
-            fieldStyles,
-            error &&
-              "border-red-500 hover:border-red-500 focus-visible:border-red-500 focus-visible:ring-red-500/20",
+            fieldStyle,
+            error && "border-red-400 focus-visible:border-red-500 focus-visible:ring-red-500/15",
             className,
           )}
           aria-invalid={!!error}

@@ -1,4 +1,6 @@
 import { Button } from "@/components/ui/Button";
+import { panel } from "@/lib/utils/design-tokens";
+import { cn } from "@/lib/utils/cn";
 
 interface ErrorStateProps {
   message?: string;
@@ -11,12 +13,12 @@ export function ErrorState({
 }: ErrorStateProps) {
   return (
     <div
-      className="flex flex-col items-center justify-center gap-3 py-16 text-center"
+      className={cn(panel, "flex flex-col items-center justify-center gap-5 px-6 py-16 text-center")}
       role="alert"
     >
-      <div className="rounded-full bg-red-50 p-4">
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 ring-1 ring-red-100">
         <svg
-          className="h-8 w-8 text-red-500"
+          className="h-5 w-5 text-red-600"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -30,13 +32,11 @@ export function ErrorState({
           />
         </svg>
       </div>
-      <h3 className="text-lg font-semibold text-slate-900">Unable to load results</h3>
-      <p className="max-w-md text-sm text-slate-600">{message}</p>
-      {onRetry && (
-        <Button variant="primary" onClick={onRetry}>
-          Try again
-        </Button>
-      )}
+      <div className="max-w-sm space-y-2">
+        <h3 className="text-lg font-semibold text-[var(--color-ink)]">Unable to load results</h3>
+        <p className="text-sm leading-relaxed text-[var(--color-ink-muted)]">{message}</p>
+      </div>
+      {onRetry && <Button onClick={onRetry}>Try again</Button>}
     </div>
   );
 }

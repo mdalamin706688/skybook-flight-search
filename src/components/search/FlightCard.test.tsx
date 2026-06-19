@@ -51,7 +51,7 @@ describe("FlightCard", () => {
   it("has a select button", async () => {
     render(<FlightCard flight={mockFlight} passengers={1} />);
     const button = screen.getByRole("button", {
-      name: /select delta flight dl 401/i,
+      name: /select delta dl 401/i,
     });
     expect(button).toBeInTheDocument();
     await userEvent.click(button);

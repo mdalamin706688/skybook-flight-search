@@ -22,13 +22,13 @@ describe("SearchForm", () => {
     render(<SearchForm />);
     expect(screen.getByLabelText(/from/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/to/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/date/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/passengers/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/depart/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/travelers/i)).toBeInTheDocument();
   });
 
   it("navigates to search results on valid submit", async () => {
     render(<SearchForm />);
-    await userEvent.click(screen.getByRole("button", { name: /search flights/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^search$/i }));
 
     expect(pushMock).toHaveBeenCalledWith(
       expect.stringContaining("/search?origin=JFK&destination=LAX"),
@@ -39,7 +39,7 @@ describe("SearchForm", () => {
     render(<SearchForm />);
     await userEvent.selectOptions(screen.getByLabelText(/from/i), "LAX");
     await userEvent.selectOptions(screen.getByLabelText(/to/i), "LAX");
-    await userEvent.click(screen.getByRole("button", { name: /search flights/i }));
+    await userEvent.click(screen.getByRole("button", { name: /^search$/i }));
 
     expect(screen.getByText(/origin and destination must differ/i)).toBeInTheDocument();
     expect(pushMock).not.toHaveBeenCalled();
