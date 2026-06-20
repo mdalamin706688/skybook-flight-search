@@ -92,7 +92,7 @@ Filtering and sorting happen **client-side** after fetch. Results are **paginate
 ### Booking Flow
 
 ```
-FlightCard → selectFlight (Zustand) → /booking/[flightId]
+FlightCard → selectFlight (Zustand) → /booking?flightId=…
   → useFlightById (fallback if store empty, e.g. refresh)
   → FlightReview + BookingForm
   → POST /api/bookings (validate server-side with same Zod schema)

@@ -18,6 +18,7 @@ import { getAirportLabel } from "@/lib/constants/airports";
 import { displayMd, panel } from "@/lib/utils/design-tokens";
 import { cn } from "@/lib/utils/cn";
 import { parseSearchParamsFromUrl } from "@/lib/validation/schemas";
+import type { AvailableRoute } from "@/lib/data/flights-repository";
 
 export function SearchResults() {
   const searchParams = useSearchParams();
@@ -58,7 +59,7 @@ export function SearchResults() {
     const hints =
       data?.availableRoutes
         ?.slice(0, 3)
-        .map((r) => `${r.origin}→${r.destination}`)
+        .map((r: AvailableRoute) => `${r.origin}→${r.destination}`)
         .join(", ") ?? "";
     return (
       <EmptyState

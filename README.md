@@ -25,7 +25,15 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Also build a static export for GitHub Pages:
+
+```bash
+npm run build:pages
+```
+
+**Live demo:** https://mdalamin706688.github.io/skybook-flight-search/
+
+GitHub Pages uses a static export with client-side mock data (API routes are not available on static hosting). Local `npm run dev` still uses mock API routes.
 
 ### Other Commands
 
@@ -43,7 +51,7 @@ npm run lint     # ESLint
 - Results displayed as scannable flight cards
 - Sort by price, duration, or departure time (asc/desc)
 - Filter by max price, stops, and airline
-- Paginated results (10 per page by default, configurable)
+- Paginated results (4 per page by default, configurable: 4, 8, 12, 20)
 - Compact search bar on results page for refining searches
 - Loading, empty, and error states with retry
 
@@ -62,6 +70,12 @@ Mock data lives in `data/flights.json` and covers **every airport pair** in the 
 - Regenerate with: `npm run generate:flights`
 
 Pagination shows **4 flights per page** by default (configurable: 4, 8, 12, 20).
+
+## Deployment
+
+GitHub Pages deploys automatically on push to `main` via `.github/workflows/deploy-pages.yml`.
+
+In repo **Settings → Pages**, set source to **GitHub Actions** (not “Deploy from branch / README”).
 
 ## API Routes
 

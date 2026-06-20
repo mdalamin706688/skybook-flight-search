@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate:flights": "node scripts/generate-flights.mjs"
+    "generate:flights": "node scripts/generate-flights.mjs",
+    "build:pages": "node scripts/build-github-pages.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.101.0",

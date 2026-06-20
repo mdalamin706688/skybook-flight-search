@@ -1,3 +1,9 @@
+import { isStaticExport, withBasePath } from "@/lib/constants/site";
+import {
+  staticCreateBooking,
+  staticFetchFlightById,
+  staticFetchFlights,
+} from "@/lib/api/static-flight-api";
 import type { FlightSearchParams } from "@/lib/types/flight";
 
 export interface FlightSearchOptions {
@@ -7,11 +13,11 @@ export interface FlightSearchOptions {
 export async function fetchFlights(
   params: FlightSearchParams,
   options?: FlightSearchOptions,
-): Promise<{
-  flights: import("@/lib/types/flight").Flight[];
-  count: number;
-  availableRoutes?: Array<{ origin: string; destination: string; count: number }>;
-}> {
+) {
+  if (isStaticExport) {
+    return staticFetchFlights(params, options);
+  }
+
   const searchParams = new URLSearchParams({
     origin: params.origin,
     destination: params.destination,
@@ -22,7 +28,7 @@ export async function fetchFlights(
     searchParams.set("simulateError", "true");
   }
 
-  const response = await fetch(`/api/flights?${searchParams.toString()}`);
+  const response = await fetch(withBasePath(`/api/flights?${searchParams.toString()}`));
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
@@ -33,7 +39,11 @@ export async function fetchFlights(
 }
 
 export async function fetchFlightById(id: string) {
-  const response = await fetch(`/api/flights?id=${id}`);
+  if (isStaticExport) {
+    return staticFetchFlightById(id);
+  }
+
+  const response = await fetch(withBasePath(`/api/flights?id=${id}`));
 
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
@@ -48,7 +58,11 @@ export async function createBooking(
   passengers: number,
   passengerDetails: import("@/lib/validation/schemas").BookingFormValues,
 ): Promise<{ booking: import("@/lib/types/booking").BookingConfirmation }> {
-  const response = await fetch("/api/bookings", {
+  if (isStaticExport) {
+    return staticCreateBooking(flightId, passengers, passengerDetails);
+  }
+
+  const response = await fetch(withBasePath("/api/bookings"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ flightId, passengers, passengerDetails }),

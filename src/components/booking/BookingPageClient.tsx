@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import { BookingForm } from "@/components/booking/BookingForm";
 import { FlightReview } from "@/components/booking/FlightReview";
@@ -16,10 +16,9 @@ import { displayMd } from "@/lib/utils/design-tokens";
 import { useBookingStore } from "@/store/booking-store";
 
 export function BookingPageClient() {
-  const params = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const flightId = params.flightId as string;
+  const flightId = searchParams.get("flightId");
 
   const passengersParsed = parsePassengersFromUrl(searchParams);
   const selectedFlight = useBookingStore((s) => s.selectedFlight);
@@ -40,6 +39,19 @@ export function BookingPageClient() {
     ? `/search?origin=${storedSearchParams.origin}&destination=${storedSearchParams.destination}&date=${storedSearchParams.date}&passengers=${storedSearchParams.passengers}`
     : "/search?origin=JFK&destination=LAX&date=2026-07-15&passengers=1";
 
+  if (!flightId) {
+    return (
+      <EmptyState
+        title="Missing flight"
+        description="Select a flight from search results to continue booking."
+        actionLabel="Search flights"
+        onAction={() => router.push("/")}
+      />
+    );
+  }
+
+  const activeFlightId = flightId;
+
   if (!passengersParsed.success) {
     return <EmptyState title="Invalid booking" description={passengersParsed.error} actionLabel="Search" onAction={() => router.push("/")} />;
   }
@@ -55,7 +67,7 @@ export function BookingPageClient() {
   }
 
   function handleSubmit(passengerDetails: BookingFormValues) {
-    mutate({ flightId, passengers, passengerDetails }, {
+    mutate({ flightId: activeFlightId, passengers, passengerDetails }, {
       onSuccess: (data) => {
         setConfirmation(data.booking);
         router.push("/booking/confirmation");

@@ -22,7 +22,7 @@ export function FlightCard({ flight, passengers, isLast }: FlightCardProps) {
 
   function handleSelect() {
     selectFlight(flight);
-    router.push(`/booking/${flight.id}?passengers=${passengers}`);
+    router.push(`/booking?flightId=${flight.id}&passengers=${passengers}`);
   }
 
   const label = `Select ${flight.airline} ${flight.flightNumber}, ${formatPrice(total)}`;
