@@ -24,6 +24,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SkyBook — Flight Search & Booking",
   description: "Search, compare, and book flights across major US airlines.",
+  applicationName: "SkyBook",
+  themeColor: "#0c1222",
 };
 
 export default function RootLayout({
