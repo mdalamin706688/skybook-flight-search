@@ -7,6 +7,14 @@ import { panel } from "@/lib/utils/design-tokens";
 import { cn } from "@/lib/utils/cn";
 import { bookingFormSchema, type BookingFormValues } from "@/lib/validation/schemas";
 
+/** Pre-filled traveler details for one-click demo walkthroughs. */
+const DEMO_TRAVELER: BookingFormValues = {
+  firstName: "Alex",
+  lastName: "Morgan",
+  email: "alex.morgan@example.com",
+  phone: "+1 (555) 010-2048",
+};
+
 interface BookingFormProps {
   onSubmit: (values: BookingFormValues) => void;
   isLoading?: boolean;
@@ -14,12 +22,7 @@ interface BookingFormProps {
 }
 
 export function BookingForm({ onSubmit, isLoading, error }: BookingFormProps) {
-  const [values, setValues] = useState<BookingFormValues>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-  });
+  const [values, setValues] = useState<BookingFormValues>(DEMO_TRAVELER);
   const [errors, setErrors] = useState<Partial<Record<keyof BookingFormValues, string>>>({});
 
   function handleChange(field: keyof BookingFormValues, value: string) {
