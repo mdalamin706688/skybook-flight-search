@@ -50,12 +50,12 @@ export default function HomePage() {
                 "mt-4 text-[2rem] text-white sm:mt-5 sm:text-[2.75rem]",
               )}
             >
-              Flight commerce, refined.
+              Search, compare, and book flights.
             </h1>
 
             <p className={cn(heroSubtitle, "mx-auto mt-4 max-w-md")}>
-              Search, compare, and book across major carriers — built for the clarity travelers expect
-              and the reliability operators demand.
+              Compare fares across major carriers with a clear, reliable booking experience for
+              travelers and operators.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
@@ -83,11 +83,11 @@ export default function HomePage() {
           <div className="mb-10 max-w-lg">
             <p className={eyebrow}>Why SkyBook</p>
             <h2 className={cn(displayLg, "mt-2 text-2xl sm:text-[1.75rem]")}>
-              Every step, considered.
+              From search to confirmation.
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-              A complete travel commerce flow — search, filter, paginate, and book — built with
-              production-grade architecture from day one.
+              A complete travel commerce flow — search, filter, paginate, and book — designed for
+              clarity, speed, and reliable booking outcomes.
             </p>
           </div>
 
