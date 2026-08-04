@@ -82,12 +82,11 @@ export default function HomePage() {
         <section id="features" className={cn(shellWide, sectionY, "border-t border-[var(--color-line)] pb-16")}>
           <div className="mb-10 max-w-lg">
             <p className={eyebrow}>Why SkyBook</p>
-            <h2 className={cn(displayLg, "mt-2 text-2xl sm:text-[1.75rem]")}>
+            <h2 className={cn(displayLg, "mt-2 whitespace-nowrap text-2xl sm:text-[1.75rem]")}>
               From search to confirmation.
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-              A complete travel commerce flow — search, filter, paginate, and book — designed for
-              clarity, speed, and reliable booking outcomes.
+              A complete travel commerce flow — search, filter, paginate, and book — designed for clarity, speed, and reliable booking outcomes.
             </p>
           </div>
 
