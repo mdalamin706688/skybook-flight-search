@@ -7,18 +7,18 @@ import { cn } from "@/lib/utils/cn";
 const features = [
   {
     num: "01",
-    title: "Compare instantly",
-    desc: "Sort by price, duration, or departure across 1,700+ flights on 56 routes.",
+    title: "Intelligent fare comparison",
+    desc: "Rank itineraries by price, duration, or departure time across an extensive multi-carrier inventory.",
   },
   {
     num: "02",
-    title: "Filter with precision",
-    desc: "Narrow by airline, stops, and fare ceiling without losing your search context.",
+    title: "Precision search controls",
+    desc: "Apply airline, stop, and fare filters while preserving the traveler’s original search context.",
   },
   {
     num: "03",
-    title: "Book with confidence",
-    desc: "Review every detail, enter traveler info once, and receive instant confirmation.",
+    title: "Secure booking confirmation",
+    desc: "Review itinerary details, capture traveler information, and issue confirmation in a single flow.",
   },
 ];
 
@@ -83,10 +83,10 @@ export default function HomePage() {
           <div className="mb-10 max-w-lg">
             <p className={eyebrow}>Why SkyBook</p>
             <h2 className={cn(displayLg, "mt-2 whitespace-nowrap text-2xl sm:text-[1.75rem]")}>
-              From search to confirmation.
+              End-to-end flight booking.
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-              A complete travel commerce flow — search, filter, paginate, and book — designed for clarity, speed, and reliable booking outcomes.
+              A unified travel commerce experience that connects discovery, selection, and confirmation with operational clarity at every step.
             </p>
           </div>
 
