@@ -13,7 +13,7 @@ import { useFlightById } from "@/hooks/useFlightById";
 import type { BookingFormValues } from "@/lib/validation/schemas";
 import { parsePassengersFromUrl } from "@/lib/validation/schemas";
 import { displayMd } from "@/lib/utils/design-tokens";
-import { useBookingStore } from "@/store/booking-store";
+import { stashPendingConfirmation, useBookingStore } from "@/store/booking-store";
 
 export function BookingPageClient() {
   const searchParams = useSearchParams();
@@ -70,7 +70,11 @@ export function BookingPageClient() {
     mutate({ flightId: activeFlightId, passengers, passengerDetails }, {
       onSuccess: (data) => {
         setConfirmation(data.booking);
-        router.push("/booking/confirmation");
+        stashPendingConfirmation(data.booking);
+        // Defer navigation so persist write + store subscribers settle before confirmation mounts.
+        queueMicrotask(() => {
+          router.push("/booking/confirmation");
+        });
       },
     });
   }
