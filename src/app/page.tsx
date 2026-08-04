@@ -50,7 +50,7 @@ export default function HomePage() {
                 "mt-4 text-[2rem] text-white sm:mt-5 sm:text-[2.75rem]",
               )}
             >
-              Search, compare, and book flights.
+              Book flights with confidence.
             </h1>
 
             <p className={cn(heroSubtitle, "mx-auto mt-4 max-w-md")}>
