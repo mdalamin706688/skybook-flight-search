@@ -42,7 +42,7 @@ export default function HomePage() {
 
         <div className={cn(shellWide, "relative z-10 pb-16 pt-28 sm:pb-20 sm:pt-32")}>
           <div className="mx-auto max-w-[640px] text-center">
-            <p className={cn(eyebrow, "text-white/50")}>Global routes · Real-time compare · Instant book</p>
+            <p className={cn(eyebrow, "text-white/50")}>Global · 8 airports · 8 airlines</p>
 
             <h1
               className={cn(
@@ -50,12 +50,11 @@ export default function HomePage() {
                 "mt-4 text-[2rem] text-white sm:mt-5 sm:text-[2.75rem]",
               )}
             >
-              Book flights with confidence.
+              Find your next flight
             </h1>
 
             <p className={cn(heroSubtitle, "mx-auto mt-4 max-w-md")}>
-              Compare fares across major carriers with a clear, reliable booking experience for
-              travelers and operators.
+              Search, compare, and book flights across major global airlines.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
