@@ -9,15 +9,22 @@ import {
   useBookingStore,
 } from "@/store/booking-store";
 
-/** Wait for zustand persist rehydration before treating empty confirmation as "missing". */
+/**
+ * Wait for zustand persist rehydration before treating empty confirmation as "missing".
+ * Must not touch `.persist` during SSR/prerender — it is undefined on the server.
+ */
 function useBookingStoreHydrated() {
-  const [hydrated, setHydrated] = useState(() =>
-    useBookingStore.persist.hasHydrated(),
-  );
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    setHydrated(useBookingStore.persist.hasHydrated());
-    return useBookingStore.persist.onFinishHydration(() => {
+    const persistApi = useBookingStore.persist;
+    if (!persistApi) {
+      setHydrated(true);
+      return;
+    }
+
+    setHydrated(persistApi.hasHydrated());
+    return persistApi.onFinishHydration(() => {
       setHydrated(true);
     });
   }, []);
