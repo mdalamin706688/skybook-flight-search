@@ -42,7 +42,7 @@ export default function HomePage() {
 
         <div className={cn(shellWide, "relative z-10 pb-16 pt-28 sm:pb-20 sm:pt-32")}>
           <div className="mx-auto max-w-[640px] text-center">
-            <p className={cn(eyebrow, "text-white/50")}>US domestic · 8 airports · 8 airlines</p>
+            <p className={cn(eyebrow, "text-white/50")}>Global routes · Real-time compare · Instant book</p>
 
             <h1
               className={cn(
@@ -50,11 +50,12 @@ export default function HomePage() {
                 "mt-4 text-[2rem] text-white sm:mt-5 sm:text-[2.75rem]",
               )}
             >
-              Flight search, refined.
+              Flight commerce, refined.
             </h1>
 
             <p className={cn(heroSubtitle, "mx-auto mt-4 max-w-md")}>
-              Search, compare, and book with a checkout experience designed for clarity — not clutter.
+              Search, compare, and book across major carriers — built for the clarity travelers expect
+              and the reliability operators demand.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
@@ -85,8 +86,8 @@ export default function HomePage() {
               Every step, considered.
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-              A complete take-home flow — search, filter, paginate, and book — with production-grade
-              patterns throughout.
+              A complete travel commerce flow — search, filter, paginate, and book — built with
+              production-grade architecture from day one.
             </p>
           </div>
 

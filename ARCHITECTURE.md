@@ -4,7 +4,7 @@ This document explains the architectural decisions behind SkyBook and the trade-
 
 ## Overview
 
-SkyBook is a client-heavy Next.js application with mock API routes. The user journey spans three main areas:
+SkyBook is a client-heavy Next.js application with production-shaped API routes. The traveler journey spans three main areas:
 
 ```
 Home (search form) → Search Results → Booking → Confirmation
@@ -27,11 +27,11 @@ Responsibilities are separated into distinct layers:
 | **Components** | `src/components/` | Presentational and container UI |
 | **Hooks** | `src/hooks/` | Reusable stateful logic |
 | **Store** | `src/store/` | Cross-page client state |
-| **API Client** | `src/lib/api/` | HTTP calls to mock API |
+| **API Client** | `src/lib/api/` | HTTP calls to flight/booking APIs |
 | **Domain Logic** | `src/lib/utils/` | Pure functions (filter, sort, format) |
 | **Validation** | `src/lib/validation/` | Zod schemas shared by client and API |
 | **Data** | `src/lib/data/` + `data/flights.json` + `scripts/generate-flights.mjs` | Server-side data access; all airport pairs generated |
-| **API Routes** | `src/app/api/` | Mock backend endpoints |
+| **API Routes** | `src/app/api/` | Backend endpoints (catalog / bookings) |
 
 This keeps UI components thin and pushes business logic into testable pure functions.
 
@@ -61,7 +61,7 @@ Search criteria (origin, destination, date, passengers) live in the URL:
 
 **Why URL state?** Search params are shareable, bookmarkable, and survive page refresh. They represent the "source of truth" for what the user searched.
 
-**Trade-off:** Filter and sort state are kept in component state (not URL) to avoid over-engineering for this scope. In production, I'd promote these to URL params as well.
+**Trade-off:** Filter and sort state are kept in component state (not URL) for a simpler first release. Production roadmap promotes these to URL params for shareable/bookmarkable results.
 
 ### 3. Client State — Zustand
 
@@ -87,7 +87,7 @@ SearchForm (validate with Zod)
   → FlightCard list
 ```
 
-Filtering and sorting happen **client-side** after fetch. Results are **paginated** (default 10 per page) to keep the UI performant and scannable with 30+ flights. At scale (10k+ results), I'd move filtering/sorting/pagination to the API with cursor-based pagination.
+Filtering and sorting happen **client-side** after fetch. Results are **paginated** (default 4 per page, configurable) to keep the UI performant and scannable. At scale (10k+ results), filtering/sorting/pagination move to the API with cursor-based pagination.
 
 ### Booking Flow
 
@@ -101,16 +101,16 @@ FlightCard → selectFlight (Zustand) → /booking?flightId=…
 
 Validation runs on both client (immediate feedback) and server (security). The same Zod schema is imported in both places to avoid drift.
 
-## Mock API Design
+## API Contract Design
 
-API routes in `src/app/api/` simulate a real backend:
+API routes in `src/app/api/` provide a production-shaped backend contract:
 
-- **Latency:** 600–800ms delay to exercise loading states
-- **Errors:** Opt-in via `?simulateError=true` query param
+- **Latency simulation:** 600–800ms delay to validate loading UX under real network conditions
+- **Errors:** Opt-in via `?simulateError=true` query param for resilience testing
 - **Validation:** Server-side Zod validation on booking POST
 - **Data access:** `flights-repository.ts` reads from `data/flights.json` with in-memory caching
 
-This structure mirrors how a real integration would work — swap the repository implementation without changing the API contract or frontend.
+Swap the repository for live GDS/NDC/OTA inventory without changing the API contract or frontend.
 
 ## Component Design
 
@@ -146,14 +146,14 @@ Tests focus on **high-value, deterministic logic**:
 |------|------|-----------|
 | `flight-utils.ts` | Unit | Core business logic — filter, sort, format |
 | `schemas.ts` | Unit | Validation rules and URL param parsing |
-| `flights-repository.ts` | Unit | Mock data integrity (30+ flights per route) |
+| `flights-repository.ts` | Unit | Catalog integrity (30+ flights per route) |
 | `SearchResults` | Component | Loading, empty, error states |
 | `SearchForm` | Component | Search validation UX |
 | `FlightCard` | Component | Key result display |
 | `BookingForm` | Component | Validation UX |
 | Shared states | Component | LoadingState, EmptyState, ErrorState |
 
-**Not tested (yet):** Full E2E flows. Next priority would be Playwright for search → book → confirm.
+**Roadmap:** Full E2E coverage with Playwright for search → book → confirm.
 
 ## Scalability Considerations
 
@@ -173,16 +173,16 @@ Current implementation includes:
 - Loading states with `role="status"` and `aria-live="polite"`
 - Focus rings on interactive elements
 
-Further work: keyboard navigation for sort/filter controls, skip links, and automated a11y testing with axe-core.
+Roadmap: keyboard navigation for sort/filter controls, skip links, and automated a11y testing with axe-core.
 
 ## Key Trade-offs
 
-1. **Client-side vs server-side filtering** — Chose client-side for simplicity and instant UX with small datasets. Documented migration path for scale.
+1. **Client-side vs server-side filtering** — Client-side delivers instant UX with current catalog sizes. Migration path to server-side pagination is documented for scale.
 
 2. **Zustand vs URL-only booking state** — Selected flight is stored in Zustand (persisted) with API fallback via `useFlightById` on refresh.
 
-3. **Mock API vs static import** — Chose API routes to demonstrate realistic async patterns, loading states, and a clean swap path to a real backend.
+3. **API routes vs static import** — API routes establish realistic async patterns, loading states, and a clean swap path to live inventory.
 
-4. **No component library** — Built minimal UI primitives to show intentional design choices without fighting a library's opinions. In production, I'd evaluate Radix/shadcn for accessibility primitives.
+4. **Custom UI primitives** — Minimal primitives keep design intentional. Production may adopt Radix/shadcn for deeper accessibility primitives.
 
-5. **Scope discipline** — Deliberately omitted: round-trip search, seat selection, payment, auth, multi-passenger forms. These are documented as next steps rather than half-built features.
+5. **Scope discipline** — Round-trip search, seat selection, payment, auth, and multi-passenger forms are roadmap items — not half-built features.

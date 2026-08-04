@@ -1,13 +1,15 @@
-# SkyBook — Flight Search & Booking
+# SkyBook — Flight Search & Booking Platform
 
-A flight search aggregator built as a take-home exercise for iBox Lab. Users can search for flights, filter and sort results, select a flight, and complete a booking flow with validation and confirmation.
+SkyBook is a production-oriented flight search and booking platform. Travelers can search routes, compare and filter fares, select an itinerary, and complete booking with validated passenger data and instant confirmation.
+
+Built for commercial travel commerce: clear UX, typed APIs, resilient async flows, and an architecture ready to connect to live airline and GDS inventory.
 
 ## Tech Stack
 
 - **Next.js 16** (App Router) with **React 19** and **TypeScript**
 - **TanStack Query** — server state (fetching, caching, loading/error)
 - **Zustand** — client state for booking flow (selected flight, confirmation)
-- **Zod** — form validation schemas
+- **Zod** — form validation schemas shared by client and API
 - **Tailwind CSS** — styling
 - **Vitest** + **Testing Library** — unit and component tests
 
@@ -25,15 +27,15 @@ npm install
 npm run dev
 ```
 
-Also build a static export for GitHub Pages:
+Build a static export for GitHub Pages:
 
 ```bash
 npm run build:pages
 ```
 
-**Live demo:** https://mdalamin706688.github.io/skybook-flight-search/
+**Live product demo:** https://mdalamin706688.github.io/skybook-flight-search/
 
-GitHub Pages uses a static export with client-side mock data (API routes are not available on static hosting). Local `npm run dev` still uses mock API routes.
+GitHub Pages uses a static export with client-side catalog data (API routes are not available on static hosting). Local `npm run dev` uses mock API routes that mirror a real backend contract.
 
 ### Other Commands
 
@@ -44,7 +46,7 @@ npm run test     # Run tests
 npm run lint     # ESLint
 ```
 
-## Features
+## Product Capabilities
 
 ### Flight Search
 - Search by origin, destination, date, and passenger count
@@ -61,12 +63,12 @@ npm run lint     # ESLint
 - Complete passenger information form with validation
 - Receive booking confirmation with reference number
 
-## Demo Data
+## Catalog Data
 
-Mock data lives in `data/flights.json` and covers **every airport pair** in the search dropdown:
+Flight catalog lives in `data/flights.json` and covers **every airport pair** in the search dropdown:
 
 - **8 airports** → **56 routes** → **1,792 flights** (32 per route)
-- Date: **2026-07-15**
+- Reference date: **2026-07-15**
 - Regenerate with: `npm run generate:flights`
 
 Pagination shows **4 flights per page** by default (configurable: 4, 8, 12, 20).
@@ -85,7 +87,7 @@ In repo **Settings → Pages**, set source to **GitHub Actions** (not “Deploy 
 | GET | `/api/flights?id=` | Get single flight |
 | POST | `/api/bookings` | Create booking |
 
-API routes simulate network latency (~600–800ms). Append `simulateError=true` to the search URL to test error handling:
+API routes simulate network latency (~600–800ms). Append `simulateError=true` to the search URL to verify error handling:
 
 ```
 /search?origin=JFK&destination=LAX&date=2026-07-15&passengers=1&simulateError=true
@@ -101,7 +103,7 @@ src/
 ├── lib/              # Types, utils, validation, API client
 └── store/            # Zustand store
 data/
-└── flights.json      # Mock flight data
+└── flights.json      # Flight catalog
 ```
 
 See [ARCHITECTURE.md](./ARCHITECTURE.md) for design decisions and trade-offs.
@@ -111,7 +113,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for design decisions and trade-offs.
 Tests cover:
 - Flight filtering, sorting, and formatting utilities
 - Zod validation schemas and URL param parsing
-- Mock data repository (30+ flights on primary route)
+- Catalog repository integrity (30+ flights on primary route)
 - Search form and results (loading, empty, error states)
 - Key UI components (FlightCard, BookingForm, shared states)
 
@@ -119,16 +121,16 @@ Tests cover:
 npm test
 ```
 
-## What I'd Do Next
+## Roadmap
 
-Given more time, priorities would be:
+Near-term commercial priorities:
 
 1. **URL-driven filters/sort** — persist filter and sort state in search params for shareable/bookmarkable results
-2. **Integration tests** — Playwright E2E for the full search → book flow
-3. **Accessibility audit** — keyboard navigation, screen reader testing
-4. **Pagination / virtual scrolling** — for large result sets (1000+ flights)
-5. **Real backend integration** — swap mock API for typed API client with OpenAPI-generated types
+2. **End-to-end coverage** — Playwright E2E for the full search → book flow
+3. **Accessibility hardening** — keyboard navigation, screen reader testing, axe-core CI
+4. **Scale for inventory** — server-side filter/sort and cursor pagination for large result sets
+5. **Live inventory integration** — swap catalog API for typed clients (GDS / NDC / OTA partners) with OpenAPI-generated types
 
 ## License
 
-MIT — take-home exercise submission.
+MIT

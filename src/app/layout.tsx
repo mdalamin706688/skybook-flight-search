@@ -22,8 +22,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SkyBook — Flight Search & Booking",
-  description: "Search, compare, and book flights across major US airlines.",
+  title: "SkyBook — Flight Search & Booking Platform",
+  description:
+    "Enterprise flight search and booking: compare fares across major airlines, filter with precision, and confirm travel in minutes.",
   applicationName: "SkyBook",
   themeColor: "#0c1222",
 };

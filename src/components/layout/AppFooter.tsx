@@ -16,7 +16,8 @@ export function AppFooter() {
                 </span>
               </Link>
               <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink-muted)]">
-                Premium flight search and booking for the iBox Lab senior frontend take-home.
+                Enterprise-ready flight search and booking — compare fares, refine results, and confirm
+                travel in one seamless flow.
               </p>
             </div>
 
@@ -27,9 +28,9 @@ export function AppFooter() {
                 </p>
                 <ul className="mt-4 space-y-3">
                   {[
-                    { label: "Search", href: "/" },
+                    { label: "Search flights", href: "/" },
                     {
-                      label: "Sample results",
+                      label: "Popular routes",
                       href: "/search?origin=JFK&destination=LAX&date=2026-07-15&passengers=1",
                     },
                   ].map((item) => (
@@ -50,7 +51,7 @@ export function AppFooter() {
 
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-faint)]">
-                  Source
+                  Resources
                 </p>
                 <ul className="mt-4 space-y-3">
                   <li>
@@ -96,7 +97,7 @@ export function AppFooter() {
       <div className="bg-[var(--color-ink)] text-white">
         <div className={cn(shellWide, "flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between")}>
           <p className="text-xs text-white/50">
-            © {new Date().getFullYear()} SkyBook · iBox Lab take-home project
+            © {new Date().getFullYear()} SkyBook. All rights reserved.
           </p>
           <p className="text-xs text-white/40">
             Next.js 16 · React 19 · TypeScript · TanStack Query
